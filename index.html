@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080d0b">
+<title>THE OMEGA ARCHIVE</title>
+<style>
+:root{--bg:#080d0b;--panel:#101a15;--panel2:#14221a;--line:#294334;--green:#8dffad;--muted:#91a99a;--red:#ff5c68;--white:#e8f2eb}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#173b27 0%,#080d0b 55%);color:var(--white);font:16px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace}
+.wrap{max-width:900px;margin:auto;padding:24px 16px 60px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;border-bottom:1px solid var(--line);padding:8px 0 18px}
+.tag{color:var(--red);border:1px solid #71313a;padding:4px 9px;font-size:11px;letter-spacing:2px}.small{color:var(--muted);font-size:12px}
+h1{font-size:clamp(34px,8vw,64px);line-height:1.05;letter-spacing:-3px;margin:34px 0 8px;color:var(--green)}
+h2{font-size:22px;margin:0 0 12px;color:var(--green)}p{color:#c6d7cb}.intro{max-width:700px}
+.panel{background:linear-gradient(145deg,var(--panel),#0c1410);border:1px solid var(--line);border-radius:12px;padding:20px;margin:18px 0;box-shadow:0 12px 40px #0005}
+.status{display:flex;justify-content:space-between;gap:14px;align-items:center}.progress{height:8px;background:#1d2b22;border-radius:99px;overflow:hidden;margin-top:12px}.bar{height:100%;width:0;background:var(--green);transition:width .3s}
+.stage-list{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:16px 0}.stage-dot{border:1px solid var(--line);border-radius:7px;text-align:center;padding:9px 2px;color:var(--muted);font-size:12px}.stage-dot.done{background:#173b27;color:var(--green);border-color:#39744c}.stage-dot.active{border-color:var(--green);color:var(--green)}
+.clue{white-space:pre-wrap;background:#070b09;border:1px solid #26392d;border-radius:8px;padding:14px;color:#d9f4df;overflow-wrap:anywhere}
+input{width:100%;background:#070b09;color:var(--green);border:1px solid #3b6248;border-radius:7px;padding:13px;font:inherit;outline:none}input:focus{border-color:var(--green);box-shadow:0 0 0 2px #8dffad22}
+button{background:var(--green);color:#07100a;border:0;border-radius:7px;padding:12px 16px;font:700 14px ui-monospace,monospace;cursor:pointer}button.secondary{background:#1b2b21;color:var(--white);border:1px solid var(--line)}button:disabled{opacity:.45;cursor:not-allowed}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.feedback{min-height:25px;margin-top:10px;font-size:13px}.good{color:var(--green)}.bad{color:var(--red)}
+details{border-top:1px solid var(--line);padding:12px 0}summary{cursor:pointer;color:var(--green)}.footer{margin-top:35px;border-top:1px solid var(--line);padding-top:14px;color:var(--muted);font-size:11px}
+code{color:var(--green)}.hidden{display:none!important}
+@media(max-width:520px){.wrap{padding:16px 12px 40px}.panel{padding:15px}.stage-list{grid-template-columns:repeat(5,1fr)}.stage-dot{font-size:10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><span class="tag">RESTRICTED // OMEGA</span><span class="small">ARCHIVE NODE 07 · ACCESS MONITORED</span></div>
+  <h1>THE OMEGA<br>ARCHIVE</h1>
+  <p class="intro">The truth was not destroyed. It was divided into ten investigations. Each answer is the key to the next file. Keep a record of every discovery.</p>
+
+  <section class="panel">
+    <div class="status"><div><div class="small">INVESTIGATION PROGRESS</div><strong id="progressText">00 / 10 FILES CLEARED</strong></div><div class="tag" id="statusTag">LOCKED</div></div>
+    <div class="progress"><div class="bar" id="progressBar"></div></div>
+    <div class="stage-list" id="stageList"></div>
+  </section>
+
+  <main class="panel" id="game">
+    <div class="small" id="fileNo">FILE 01 / 10</div>
+    <h2 id="stageTitle">THE FIRST SIGNAL</h2>
+    <p id="stageStory"></p>
+    <div class="clue" id="stageClue"></div>
+    <p class="small" id="stageInstruction"></p>
+    <label for="answer" class="small">ENTER YOUR DISCOVERY</label>
+    <input id="answer" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="TYPE YOUR ANSWER">
+    <div class="actions"><button id="submitBtn">VERIFY ANSWER</button><button class="secondary" id="clearBtn">CLEAR</button></div>
+    <div class="feedback" id="feedback" aria-live="polite"></div>
+  </main>
+
+  <section class="panel hidden" id="complete">
+    <div class="tag">TRANSMISSION RECOVERED</div>
+    <h2>ALL TEN FILES CLEARED</h2>
+    <p>The archive has accepted the final transmission. Record the sequence exactly, including the leading zero.</p>
+    <div class="clue" style="font-size:clamp(22px,6vw,36px);text-align:center;letter-spacing:3px">01.18.15.15.19.08</div>
+    <p class="small">END OF PROJECT OMEGA</p>
+  </section>
+
+  <details><summary>OPERATOR NOTES</summary><p class="small">Use the clues in order. Answers are not case-sensitive. For number codes, punctuation is ignored only where the clue says so. Your progress is saved in this browser on this device.</p></details>
+  <div class="footer">OMEGA ARCHIVE // STATIC TERMINAL // UNAUTHORISED ACCESS IS PROHIBITED</div>
+</div>
+<script>
+const files = [
+{title:"THE FIRST SIGNAL",story:"A damaged transmission was recovered from the first archive terminal. The sender left five lines. The beginning of each line matters more than the line itself.",clue:`Never trust the final report.\nOnly the opening survives.\nRecords conceal their first marks.\nTime has erased the middle.\nHidden in plain sight.`,instruction:"Take the first letter of each line. Enter the five-letter direction."},
+{title:"THE COMPASS PROTOCOL",story:"The first key was NORTH. The next file describes a set of indexed signal strips. Use the letter positions of N-O-R-T-H as 14, 15, 18, 20, 8. Repeat the key from the beginning until every strip has been used.",clue:`Use 1-based positions. For each row, take the character at the matching position.\n\nROW 1  ROW 2  ROW 3  ROW 4  ROW 5  ROW 6  ROW 7\n__ROWS__`,instruction:"Apply NORTH repeatedly to the seven rows. Read the extracted letters from row 1 to row 7."},
+{title:"THE MIRRORED ROOM",story:"The strips revealed COMPASS. A compass gives points; the archive now converts points into alphabet positions. The numbers below are not coordinates on a map.",clue:`13 - 9 - 18 - 18 - 15 - 18`,instruction:"Convert each number to its alphabet letter (A=1, B=2 ... Z=26). Enter the resulting six-letter word."},
+{title:"THE SHADOW EQUATION",story:"The mirrored room revealed MIRROR. The next document is written for a mirror: it must be read in reverse, character by character.",clue:`WODAHS`,instruction:"Reverse the six letters. Do not translate or rearrange them."},
+{title:"THE ECLIPSE FILES",story:"The reversed message was SHADOW. The witness describes what happens when a shadow becomes vast enough to cover a celestial source of light.",clue:`I occur when one celestial body moves into the shadow of another, or blocks its light from an observer.\n\nI have 7 letters.\nI begin with E.\nI end with E.`,instruction:"Identify the astronomical event described. Enter its seven-letter name."},
+{title:"THE ORBITAL RECORDS",story:"The answer ECLIPSE unlocked a record about celestial motion. The missing term is the path followed by an object as it travels around another object under gravity.",clue:`A satellite follows this path around a planet.\nA planet follows this path around a star.\nIt is not the object itself, but the route it follows.\n\n_ _ _ _ _`,instruction:"Enter the five-letter scientific term."},
+{title:"THE SILENT SIGNAL",story:"ORBIT opened a satellite communications log. The log contains a message in Morse code. Decode the signal using the standard international Morse alphabet.",clue:`...  ..  --.  -.  .-  .-..`,instruction:"Separate the Morse letters by the wider spaces. Enter the six-letter word."},
+{title:"THE VECTOR LABORATORY",story:"The satellite's SIGNAL led to a laboratory notebook. Its final definition describes a quantity that has both magnitude and direction.",clue:`In physics and mathematics, a displacement can be represented by an arrow.\n\nIt has:\n- magnitude\n- direction\n\nIt is not simply a scalar.`,instruction:"Enter the six-letter mathematical term."},
+{title:"THE FORGOTTEN ARCHIVE",story:"VECTOR was the instruction: follow the coordinates. Each coordinate is written as (line, word). Take the FIRST letter of the word at that position.",clue:`LINE 1: Ancient records remain sealed.\nLINE 2: Records were moved underground.\nLINE 3: Cipher notes survived the fire.\nLINE 4: Hidden passages connect the rooms.\nLINE 5: Index cards describe the experiment.\nLINE 6: Vault doors require a sequence.\nLINE 7: Evidence is stored beyond this wall.\n\nCOORDINATES:\n(1,1) (2,1) (3,1) (4,1) (5,1) (6,1) (7,1)`,instruction:"Follow the seven coordinates in order. Combine the seven letters into one word."},
+{title:"THE FINAL TRANSMISSION",story:"ARCHIVE is the final key. The last page contains six statements. Their first letters form a six-letter message. Convert that message using A=01, B=02 ... Z=26. Keep two digits for every letter.",clue:`At dawn, the first record was opened.\nRecords showed a signal had returned.\nOnly one witness remained.\nOnly one route led outside.\nSilence covered the final chamber.\nHidden beneath the desk was the key.`,instruction:"Take the first letter of each line, convert all six letters to two-digit alphabet positions, and separate the numbers with dots. Enter the complete code."}
+];
+const expectedHashes = ['34a489fb589a0a73111285e0760d14d79669e3aa152c925d77ad193c2782580a', '607c897318d9513eb24e03828fe85393b9bc111c365657bca47ad93fe0231b67', 'ddb33d9a4e289a682da87b8376805aeb33d7b76b6dfced55d9ad59672c2cfab8', 'd8b0f1de2500842edc7e3287adae5a84e153d34817697a313ba0ed0a5c335d8a', '21074fbae9cb08ce8e163ace7822202521d1506df0d86dadf6320cbaf19a8ae5', '46d27380af82d6d618e163346c67dd7bc617d40836551d082e0aa6582b8bc934', '8e1a5272bdd1d3e31686395747952c2384871c7f71f73dc660dcd0999f934582', '228578699ea93c03e19217fbf2c97c625a4489e6a9153669cabc0bea0789ce74', 'b22a9799327ae5c2ede95de1e1943426c145a79ec6f6735b3465b5e0127715cc', '4282d55d9af36b0c03d568d38a2ab496aad5a9af250531c9ad1fea9bbef89e5d'];
+const rowData = ['XXXXXXXXXXXXXCXXXXXX', 'XXXXXXXXXXXXXXOXXXXX', 'XXXXXXXXXXXXXXXXXMXX', 'XXXXXXXXXXXXXXXXXXXP', 'XXXXXXXAXXXXXXXXXXXX', 'XXXXXXXXXXXXXSXXXXXX', 'XXXXXXXXXXXXXXSXXXXX'];
+files[1].clue = files[1].clue.replace("__ROWS__", rowData.join("   "));
+let unlocked = Number(localStorage.getItem("omegaUnlocked") || "0");
+unlocked = Math.max(0, Math.min(10, unlocked));
+const $ = id => document.getElementById(id);
+function render(){
+  $("progressText").textContent = String(unlocked).padStart(2,"0")+" / 10 FILES CLEARED";
+  $("progressBar").style.width = (unlocked*10)+"%";
+  $("statusTag").textContent = unlocked===10 ? "COMPLETE" : unlocked===0 ? "LOCKED" : "IN PROGRESS";
+  $("stageList").innerHTML = files.map((f,i)=>`<div class="stage-dot ${i<unlocked?'done':''} ${i===unlocked&&unlocked<10?'active':''}">${i<unlocked?'✓':String(i+1).padStart(2,'0')}</div>`).join("");
+  if(unlocked>=10){$("game").classList.add("hidden");$("complete").classList.remove("hidden");return;}
+  $("complete").classList.add("hidden");$("game").classList.remove("hidden");
+  const f=files[unlocked];
+  $("fileNo").textContent=`FILE ${String(unlocked+1).padStart(2,"0")} / 10`;
+  $("stageTitle").textContent=f.title;$("stageStory").textContent=f.story;
+  $("stageClue").textContent=f.clue;$("stageInstruction").textContent=f.instruction;
+  $("answer").value="";$("feedback").textContent="";$("answer").focus();
+}
+async function sha256(s){
+  const data=new TextEncoder().encode(s);
+  const hash=await crypto.subtle.digest("SHA-256",data);
+  return [...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+async function submit(){
+  if(unlocked>=10)return;
+  const raw=$("answer").value.trim().toUpperCase();
+  const normalized=unlocked===9?raw.replace(/\s+/g,""):raw.replace(/\s+/g,"");
+  const digest=await sha256(normalized);
+  if(digest===expectedHashes[unlocked]){
+    unlocked++;localStorage.setItem("omegaUnlocked",String(unlocked));
+    $("feedback").textContent=unlocked===10?"FINAL TRANSMISSION ACCEPTED.":"ACCESS GRANTED. THE NEXT FILE IS NOW AVAILABLE.";
+    $("feedback").className="feedback good";
+    setTimeout(render,850);
+  }else{
+    $("feedback").textContent="ACCESS DENIED. Re-examine the evidence and try again.";
+    $("feedback").className="feedback bad";
+  }
+}
+$("submitBtn").addEventListener("click",submit);
+$("answer").addEventListener("keydown",e=>{if(e.key==="Enter")submit();});
+$("clearBtn").addEventListener("click",()=>{$("answer").value="";$("feedback").textContent="";$("answer").focus();});
+render();
+</script>
+</body></html>
